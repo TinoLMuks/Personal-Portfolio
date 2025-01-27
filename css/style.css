@@ -18,6 +18,7 @@ body.dark{
 body{
     line-height: 1.5;
     font-size: 20px; /* 16*/
+    
 
 }
 
@@ -27,6 +28,7 @@ body{
     outline: none;
     text-decoration: none;
     box-sizing: border-box;
+    
 }
 
 ::before,::after{
@@ -309,8 +311,9 @@ h3.hello span{
     width: 80px;
     border-right: 10px solid var(--skin-color);
     border-bottom: 10px solid var(--skin-color);
-    right: 20px;
-    bottom: -40px;
+    right: 8px;
+    bottom: -15px;
+    border-radius: 20px;
 }
 
 .personal-photo::before{
@@ -320,8 +323,9 @@ h3.hello span{
     width: 80px;
     border-left: 10px solid var(--skin-color);
     border-top: 10px solid var(--skin-color);
-    left: 20px;
-    top: -40px;
+    left: 10px;
+    top: -25px;
+    border-radius: 20px;
 }
 
 .home .personal-photo img{
@@ -564,6 +568,7 @@ h3.hello span{
     margin: 0 auto 30px;
     text-align: center;
     transition: all 0.3s ease;
+    color: #000;
 }
 
 .service .service-item .service-item-inner .icon .fa{
@@ -579,7 +584,7 @@ h3.hello span{
 
 .service .service-item .service-item-inner:hover .icon .fa{
     font-size:30px ;
-    color: black; /** for transition so that it doesnt blend with background color **/
+    color: white; /** for transition so that it doesnt blend with background color **/
 }
 
 .service .service-item .service-item-inner .h4{
