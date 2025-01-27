@@ -1,57 +1,44 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const path = require('path')
-const port = 3019
+const express = require('express');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static(__dirname));
-app.use(express.urlencoded({extended:true}))
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/personal-portfolio')
-const db = mongoose.connection
-db.once('open',()=>{
-    console.log("Mongodb connection successful")
-})
-
-const userSchema = new mongoose.Schema({
-    name:String,
-    email:String,
-    subject:String,
-    message:String 
-
-    //name: {type:String, maxlength: 30, required: true },
-    //email:{type: String, maxlength: 20, required: true},
-    //subject: {type: String, maxlength: 130, required: true},
-    //message:{ type: String, maxlength: 264, required: true}
-
-
-      
-
-})
-
-const Users= mongoose.model("data", userSchema)
-
-app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname, 'index.html'))
+// Configure Nodemailer
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // Use your email service
+    auth: {
+        user: 'your-email@gmail.com',
+        pass: 'your-email-password' // Use environment variables for security
+    }
 });
 
-app.post('/index.html', async (req, res)=> {
-    const {name, email, subject, message} = req.body
-    const user = new Users({
-        name,
-        email,
-        subject,
-        message
+// Handle form submission
+app.post('/send-email', (req, res) => {
+    const { name, email, subject, message } = req.body;
 
-    })
+    const mailOptions = {
+        from: email,
+        to: 'tlmukuhwa@gmail.com', // Your email to receive notifications
+        subject: subject, // Use the subject from the form
+        text: `You have received a new message from ${name} (${email}):\n\n${message}`
+    };
 
-    await user.save()
-    console.log(user)
-    res.send("Form Submission Successful")
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return res.status(500).send(error.toString());
+        }
+        res.status(200).send('Email sent: ' + info.response);
+    });
+});
 
-})
-
-app.listen(port,()=>{
-    console.log("Server started")
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
